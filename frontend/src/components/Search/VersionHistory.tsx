@@ -84,8 +84,12 @@ export default function VersionHistory() {
     setError("");
     setSuccess("");
     try {
-      const { output, updatedCookies, updatedAccount } = await getDownloadInfo(account, app, externalVersionId);
-await updateAccount(updatedAccount ? updatedAccount : { ...account, cookies: updatedCookies });
+      const { output, updatedCookies } = await getDownloadInfo(
+        account,
+        app,
+        versionId,
+      );
+      await updateAccount({ ...account, cookies: updatedCookies });
       const hash = await accountHash(account);
       const versionedSoftware = {
         ...app,
