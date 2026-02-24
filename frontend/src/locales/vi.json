@@ -114,11 +114,11 @@
       "dsid": "DSID",
       "deviceId": "Định danh thiết bị",
       "pod": "Pod",
-      "reauthSuccess": "Xác thực lại tài khoản thành công.",
-      "reauthFailed": "Xác thực lại thất bại",
+      "reauthSuccess": "Cập Nhật Giấy Phép Mới Thành Công.",
+      "reauthFailed": "Cập Nhật Giấy Phép Mới thất bại",
       "code": "Mã xác minh 2FA",
       "verify": "Xác minh",
-      "reauth": "Xác thực lại",
+      "reauth": "Gia Hạn Giấy Phép Mới",
       "delete": "Xóa tài khoản",
       "confirmDelete": "Xác nhận xóa",
       "cancel": "Hủy",
@@ -369,7 +369,7 @@
   "errors": {
     "download": {
       "redirectLocation": "Không thể truy xuất vị trí chuyển hướng",
-      "passwordExpired": "Mã xác thực mật khẩu đã hết hạn",
+      "passwordExpired": "Giấy phép hết hạn. Nhấn vào Gia Hạn để cập nhật Giấy phép mới.",
       "licenseRequired": "Cần có giấy phép - hãy ấn giấy phép trước khi ấn xuống",
       "downloadFailed": "Tải xuống thất bại: {{failureType}}",
       "noItems": "Không có mục nào được trả lời",
