@@ -4,14 +4,17 @@ import path from "path";
 import fs from "fs";
 import { config } from "./config.js";
 import { httpsRedirect } from "./middleware/httpsRedirect.js";
+import { adminAuth } from "./middleware/adminAuth.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { setupWsProxy } from "./services/wsProxy.js";
+import { seedDefaultAccountFromEnv } from "./services/defaultAccount.js";
 import searchRoutes from "./routes/search.js";
 import downloadRoutes from "./routes/downloads.js";
 import packageRoutes from "./routes/packages.js";
 import installRoutes from "./routes/install.js";
 import settingsRoutes from "./routes/settings.js";
 import bagRoutes from "./routes/bag.js";
+import defaultAccountRoutes from "./routes/defaultAccount.js";
 
 const app = express();
 
@@ -20,12 +23,14 @@ app.use(httpsRedirect);
 app.use(express.json({ limit: "50mb" }));
 
 // API routes
+app.use("/api", adminAuth);
 app.use("/api", searchRoutes);
 app.use("/api", downloadRoutes);
 app.use("/api", packageRoutes);
 app.use("/api", installRoutes);
 app.use("/api", settingsRoutes);
 app.use("/api", bagRoutes);
+app.use("/api", defaultAccountRoutes);
 
 // Serve static frontend files
 const publicDir = path.resolve(import.meta.dirname, "../public");
@@ -55,6 +60,9 @@ setupWsProxy(server);
 
 // Ensure data directory exists
 fs.mkdirSync(config.dataDir, { recursive: true });
+
+// Seed default Apple account from env (optional)
+seedDefaultAccountFromEnv();
 
 server.listen(config.port, () => {
   console.log(`Server listening on port ${config.port}`);
