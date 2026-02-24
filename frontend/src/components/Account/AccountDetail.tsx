@@ -2,12 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import PageContainer from "../Layout/PageContainer";
-import Spinner from "../common/Spinner";
-import Alert from "../common/Alert";
 import { useAccounts } from "../../hooks/useAccounts";
-import { authenticate, AuthenticationError } from "../../apple/authenticate";
 import { storeIdToCountry } from "../../apple/config";
-import { getErrorMessage } from "../../utils/error";
 
 export default function AccountDetail() {
   const { email } = useParams<{ email: string }>();
@@ -17,15 +13,9 @@ export default function AccountDetail() {
     accounts,
     loading: storeLoading,
     loadAccounts,
-    updateAccount,
     removeAccount,
   } = useAccounts();
   const [showDelete, setShowDelete] = useState(false);
-  const [reauthing, setReauthing] = useState(false);
-  const [reauthCode, setReauthCode] = useState("");
-  const [needsCode, setNeedsCode] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     loadAccounts();
@@ -56,36 +46,6 @@ export default function AccountDetail() {
         </div>
       </PageContainer>
     );
-  }
-
-  async function handleReauth() {
-    if (!account) return;
-    setError(null);
-    setSuccess(null);
-    setReauthing(true);
-
-    try {
-      const updated = await authenticate(
-        account.email,
-        account.password,
-        needsCode && reauthCode ? reauthCode : undefined,
-        account.cookies,
-        account.deviceIdentifier,
-      );
-      await updateAccount(updated);
-      setNeedsCode(false);
-      setReauthCode("");
-      setSuccess(t("accounts.detail.reauthSuccess"));
-    } catch (err) {
-      if (err instanceof AuthenticationError && err.codeRequired) {
-        setNeedsCode(true);
-        setError(err.message);
-      } else {
-        setError(getErrorMessage(err, t("accounts.detail.reauthFailed")));
-      }
-    } finally {
-      setReauthing(false);
-    }
   }
 
   async function handleDelete() {
@@ -134,62 +94,7 @@ export default function AccountDetail() {
           </dl>
         </section>
 
-        {needsCode && (
-          <section className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6">
-            <label
-              htmlFor="reauth-code"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              {t("accounts.detail.code")}
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                id="reauth-code"
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                maxLength={6}
-                value={reauthCode}
-                onChange={(e) => setReauthCode(e.target.value)}
-                disabled={reauthing}
-                placeholder="000000"
-                className="block flex-1 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-base text-gray-900 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 dark:disabled:bg-gray-800/50 transition-colors"
-                autoFocus
-              />
-              <button
-                onClick={handleReauth}
-                disabled={reauthing || !reauthCode}
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
-              >
-                {reauthing && <Spinner />}
-                {t("accounts.detail.verify")}
-              </button>
-            </div>
-          </section>
-        )}
-
-        {error && (
-          <Alert type="error" className="p-4">
-            {error}
-          </Alert>
-        )}
-
-        {success && (
-          <Alert type="success" className="p-4">
-            {success}
-          </Alert>
-        )}
-
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={handleReauth}
-            disabled={reauthing}
-            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-          >
-            {reauthing && <Spinner />}
-            {t("accounts.detail.reauth")}
-          </button>
-
           {!showDelete ? (
             <button
               onClick={() => setShowDelete(true)}
