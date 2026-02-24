@@ -62,7 +62,7 @@ export const useAccountsStore = create<AccountsState>((set, get) => ({
   }
 
   set({ accounts, loading: false });
-},,
+},
 
   addAccount: async (account: Account) => {
     const db = await getDB();
