@@ -4,11 +4,13 @@ import { useTranslation } from "react-i18next";
 import PageContainer from "../Layout/PageContainer";
 import AppIcon from "../common/AppIcon";
 import Alert from "../common/Alert";
+import Spinner from "../common/Spinner";
 import { useAccounts } from "../../hooks/useAccounts";
 import { useSettingsStore } from "../../store/settings";
 import { lookupApp } from "../../api/search";
 import { purchaseApp } from "../../apple/purchase";
 import { getDownloadInfo } from "../../apple/download";
+import { authenticate, AuthenticationError } from "../../apple/authenticate";
 import { apiPost } from "../../api/client";
 import {
   accountHash,
@@ -37,6 +39,9 @@ export default function ProductDetail() {
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [reauthing, setReauthing] = useState(false);
+  const [reauthCode, setReauthCode] = useState("");
+  const [needsCode, setNeedsCode] = useState(false);
 
   const account = accounts.find((a) => a.email === selectedAccount);
 
@@ -130,6 +135,36 @@ export default function ProductDetail() {
     }
   }
 
+  async function handleReauth() {
+    if (!account) return;
+    setError("");
+    setSuccess("");
+    setReauthing(true);
+
+    try {
+      const updated = await authenticate(
+        account.email,
+        account.password,
+        needsCode && reauthCode ? reauthCode : undefined,
+        account.cookies,
+        account.deviceIdentifier,
+      );
+      await updateAccount(updated);
+      setNeedsCode(false);
+      setReauthCode("");
+      setSuccess(t("accounts.detail.reauthSuccess"));
+    } catch (err) {
+      if (err instanceof AuthenticationError && err.codeRequired) {
+        setNeedsCode(true);
+        setError(err.message);
+      } else {
+        setError(getErrorMessage(err, t("accounts.detail.reauthFailed")));
+      }
+    } finally {
+      setReauthing(false);
+    }
+  }
+
   return (
     <PageContainer>
       <div className="space-y-6">
@@ -216,6 +251,51 @@ export default function ProductDetail() {
               >
                 {t("search.product.versionHistory")}
               </Link>
+            </div>
+
+            {/* Re-authenticate (moved from Account Detail) */}
+            <div className="space-y-2">
+              <button
+                onClick={handleReauth}
+                disabled={actionLoading || reauthing}
+                className="px-4 py-2 bg-yellow-600 text-white text-sm font-medium rounded-lg hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+              >
+                {reauthing && <Spinner />}
+                {t("accounts.detail.reauth")}
+              </button>
+
+              {needsCode && (
+                <div>
+                  <label
+                    htmlFor="reauth-code"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
+                    {t("accounts.detail.code")}
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      id="reauth-code"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={6}
+                      value={reauthCode}
+                      onChange={(e) => setReauthCode(e.target.value)}
+                      disabled={reauthing}
+                      placeholder="000000"
+                      className="block flex-1 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-base text-gray-900 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 dark:disabled:bg-gray-800/50 transition-colors"
+                    />
+                    <button
+                      onClick={handleReauth}
+                      disabled={reauthing || !reauthCode}
+                      className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+                    >
+                      {reauthing && <Spinner />}
+                      {t("accounts.detail.verify")}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
