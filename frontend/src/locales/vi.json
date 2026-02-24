@@ -370,7 +370,7 @@
     "download": {
       "redirectLocation": "Không thể truy xuất vị trí chuyển hướng",
       "passwordExpired": "Giấy phép hết hạn. Nhấn vào Gia Hạn để cập nhật Giấy phép mới.",
-      "licenseRequired": "Cần có giấy phép - hãy ấn giấy phép trước khi ấn xuống",
+      "licenseRequired": "Cần có giấy phép - hãy ấn lấy giấy phép trước khi ấn xuống",
       "downloadFailed": "Tải xuống thất bại: {{failureType}}",
       "noItems": "Không có mục nào được trả lời",
       "missingUrl": "URL tải xuống bị thiếu",
