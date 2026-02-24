@@ -394,7 +394,6 @@
       "requiresVerification": "Quá trình xác thực yêu cầu mã xác minh. Nếu không được yêu cầu nhập mã xác minh, hãy thử đăng nhập tại https://account.apple.com để kích hoạt thông báo và nhập mã vào trường Mã xác thực hai yếu tố (2FA Code).",
       "redirectLocation": "Không thể truy xuất vị trí chuyển hướng",
       "emptyBody": "Xác thực thất bại: máy chủ trả về HTTP {{status}} với nội dung trống.",
-      "missingAccountInfo": "Thông tin tài khoản bị thiếu trong phản hồi."
       "missingAddress": "Thiếu địa chỉ trong phản hồi",
       "unknownReason": "Xác thực không thành công vì lý do không xác định."
     }
