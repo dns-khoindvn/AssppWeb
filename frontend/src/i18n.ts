@@ -10,6 +10,9 @@ import ruTranslation from "./locales/ru.json";
 import viTranslation from "./locales/vi.json";
 
 const resources = {
+  "vi": {
+    translation: enUSTranslation,
+  },
   "en-US": {
     translation: enUSTranslation,
   },
@@ -38,7 +41,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: "en-US",
+    fallbackLng: "vi",
     interpolation: {
       escapeValue: false,
     },
