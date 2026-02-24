@@ -7,6 +7,7 @@ import zhTWTranslation from "./locales/zh-TW.json";
 import jaTranslation from "./locales/ja.json";
 import koTranslation from "./locales/ko.json";
 import ruTranslation from "./locales/ru.json";
+import viTranslation from "./locales/vi.json";
 
 const resources = {
   "en-US": {
@@ -26,6 +27,9 @@ const resources = {
   },
   ru: {
     translation: ruTranslation,
+  },
+  vi: {
+    translation: viTranslation,
   },
 };
 

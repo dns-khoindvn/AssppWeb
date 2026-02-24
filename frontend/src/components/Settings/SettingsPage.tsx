@@ -195,6 +195,7 @@ export default function SettingsPage() {
                 <option value="ja">日本語</option>
                 <option value="ko">한국어</option>
                 <option value="ru">Русский</option>
+                <option value="vi">Tiếng Việt</option>
               </select>
             </div>
           </div>
