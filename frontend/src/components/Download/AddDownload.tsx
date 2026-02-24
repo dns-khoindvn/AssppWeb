@@ -200,26 +200,24 @@ export default function AddDownload() {
               disabled={loading}
               className="w-1/2 truncate disabled:bg-gray-50 dark:disabled:bg-gray-800/50 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed"
             />
-            {filteredAccounts.length <= 1 ? (
-              <div className="w-1/2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-3 py-2 text-base text-gray-700 dark:text-gray-200 truncate">
-                {filteredAccounts.length === 1
-                  ? `${filteredAccounts[0].firstName} ${filteredAccounts[0].lastName} (${filteredAccounts[0].email})`
-                  : t("downloads.add.noAccountsForRegion")}
-              </div>
-            ) : (
-              <select
-                value={selectedAccount}
-                onChange={(e) => setSelectedAccount(e.target.value)}
-                className="w-1/2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-base text-gray-900 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 truncate disabled:bg-gray-50 dark:disabled:bg-gray-800/50 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
-                disabled={loading || filteredAccounts.length === 0}
-              >
-                {filteredAccounts.map((a) => (
+            <select
+              value={selectedAccount}
+              onChange={(e) => setSelectedAccount(e.target.value)}
+              className="w-1/2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-base text-gray-900 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 truncate disabled:bg-gray-50 dark:disabled:bg-gray-800/50 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+              disabled={loading || filteredAccounts.length === 0}
+            >
+              {filteredAccounts.length > 0 ? (
+                filteredAccounts.map((a) => (
                   <option key={a.email} value={a.email}>
                     {a.firstName} {a.lastName} ({a.email})
                   </option>
-                ))}
-              </select>
-            )}
+                ))
+              ) : (
+                <option value="">
+                  {t("downloads.add.noAccountsForRegion")}
+                </option>
+              )}
+            </select>
           </div>
         </form>
 

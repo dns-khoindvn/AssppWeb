@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { openDB, type IDBPDatabase } from "idb";
 import type { Account } from "../types";
+import { apiGet } from "../api/client";
 
 const DB_NAME = "asspp-accounts";
 const STORE_NAME = "accounts";
@@ -34,11 +35,34 @@ export const useAccountsStore = create<AccountsState>((set, get) => ({
   loading: true,
 
   loadAccounts: async () => {
-    set({ loading: true });
-    const db = await getDB();
-    const accounts = await db.getAll(STORE_NAME);
-    set({ accounts, loading: false });
-  },
+  set({ loading: true });
+  const db = await getDB();
+  let accounts = await db.getAll(STORE_NAME);
+
+  // Try to seed a default server-side account (optional)
+  try {
+    const resp: any = await apiGet("/api/default-account/credentials");
+    if (resp?.ok && resp?.account?.email && resp?.account?.password) {
+      const email = String(resp.account.email);
+      const password = String(resp.account.password);
+      if (!accounts.find((a) => a.email === email)) {
+        const seeded: Account = {
+          email,
+          password,
+          cookies: [],
+          storeFront: "",
+          deviceId: "",
+        };
+        await db.put(STORE_NAME, seeded);
+        accounts = [...accounts, seeded];
+      }
+    }
+  } catch {
+    // If ADMIN_PASSWORD is set and not provided, this will 401. Ignore.
+  }
+
+  set({ accounts, loading: false });
+},,
 
   addAccount: async (account: Account) => {
     const db = await getDB();

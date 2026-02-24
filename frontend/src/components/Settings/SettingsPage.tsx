@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import PageContainer from "../Layout/PageContainer";
 import Modal from "../common/Modal";
+import { apiGet } from "../../api/client";
 import { useAccountsStore } from "../../store/accounts";
 import { encryptData, decryptData } from "../../utils/crypto";
 import { countryCodeMap } from "../../apple/config";
@@ -30,6 +31,10 @@ export default function SettingsPage() {
   );
   const [serverInfo, setServerInfo] = useState<ServerInfo | null>(null);
 
+  const [adminPassword, setAdminPassword] = useState(
+    () => localStorage.getItem("asspp_admin_password") || "",
+  );
+
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const [exportPassword, setExportPassword] = useState("");
   const [exportConfirmPassword, setExportConfirmPassword] = useState("");
@@ -54,8 +59,11 @@ export default function SettingsPage() {
   }, [entity]);
 
   useEffect(() => {
-    fetch("/api/settings")
-      .then((r) => (r.ok ? r.json() : null))
+    localStorage.setItem("asspp_admin_password", adminPassword);
+  }, [adminPassword]);
+
+  useEffect(() => {
+    apiGet<ServerInfo>("/api/settings")
       .then(setServerInfo)
       .catch(() => setServerInfo(null));
   }, []);
@@ -195,11 +203,36 @@ export default function SettingsPage() {
                 <option value="ja">日本語</option>
                 <option value="ko">한국어</option>
                 <option value="ru">Русский</option>
-                <option value="vi">Tiếng Việt</option>
               </select>
             </div>
           </div>
         </section>
+<section className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6">
+  <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+    {t("settings.admin.title")}
+  </h2>
+  <div className="space-y-2">
+    <label
+      htmlFor="adminPassword"
+      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+    >
+      {t("settings.admin.passwordLabel")}
+    </label>
+    <input
+      id="adminPassword"
+      type="password"
+      value={adminPassword}
+      onChange={(e) => setAdminPassword(e.target.value)}
+      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+      placeholder="••••••••"
+      autoComplete="current-password"
+    />
+    <p className="text-sm text-gray-500 dark:text-gray-400">
+      {t("settings.admin.passwordHelp")}
+    </p>
+  </div>
+</section>
+
 
         <section className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

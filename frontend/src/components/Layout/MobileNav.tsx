@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   HomeIcon,
+  AccountsIcon,
   SearchIcon,
   DownloadsIcon,
   SettingsIcon,
@@ -9,6 +10,7 @@ import {
 
 const navItems = [
   { to: "/", label: "home", icon: HomeIcon },
+  { to: "/accounts", label: "accounts", icon: AccountsIcon },
   { to: "/search", label: "search", icon: SearchIcon },
   { to: "/downloads", label: "downloads", icon: DownloadsIcon },
   { to: "/settings", label: "settings", icon: SettingsIcon },

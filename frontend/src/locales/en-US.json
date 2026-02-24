@@ -228,6 +228,11 @@
     "about": {
       "title": "About",
       "description": "Asspp Web -- a web-based interface for managing Apple app downloads and licenses."
+    },
+    "admin": {
+      "title": "Admin",
+      "passwordLabel": "Admin password (optional)",
+      "passwordHelp": "If you set ADMIN_PASSWORD on the server, enter the same password here so the app can access protected APIs and auto-load the default Apple account."
     }
   },
   "countries": {

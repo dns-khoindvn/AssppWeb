@@ -1,10 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsStore } from "./store/settings";
-import { useAccounts } from "./hooks/useAccounts";
-import { authenticate, AuthenticationError } from "./apple/authenticate";
-import { generateDeviceId } from "./apple/config";
 
 import Sidebar from "./components/Layout/Sidebar";
 import MobileNav from "./components/Layout/MobileNav";
@@ -35,55 +32,6 @@ function Loading() {
 
 export default function App() {
   const theme = useSettingsStore((s) => s.theme);
-  const { accounts, loading: accountsLoading, addAccount } = useAccounts();
-  const [bootError, setBootError] = useState<string | null>(null);
-  const attempted = useRef(false);
-
-  // Optional: bootstrap a default account from environment variables.
-  // Set these in frontend/.env (Vite):
-  //   VITE_DEFAULT_APPLE_EMAIL=you@example.com
-  //   VITE_DEFAULT_APPLE_PASSWORD=your_password
-  //   VITE_DEFAULT_DEVICE_ID=XXXXXXXXXXXX (optional)
-  useEffect(() => {
-    if (attempted.current) return;
-    if (accountsLoading) return;
-
-    const email = import.meta.env.VITE_DEFAULT_APPLE_EMAIL as
-      | string
-      | undefined;
-    const password = import.meta.env.VITE_DEFAULT_APPLE_PASSWORD as
-      | string
-      | undefined;
-    const deviceId =
-      (import.meta.env.VITE_DEFAULT_DEVICE_ID as string | undefined) ||
-      generateDeviceId();
-
-    // Only auto-add when there are no saved accounts.
-    if (!email || !password || accounts.length > 0) {
-      attempted.current = true;
-      return;
-    }
-
-    attempted.current = true;
-    (async () => {
-      try {
-        setBootError(null);
-        const account = await authenticate(email, password, undefined, undefined, deviceId);
-        await addAccount(account);
-      } catch (err) {
-        // If Apple requires 2FA code, user must add the account manually.
-        if (err instanceof AuthenticationError && err.codeRequired) {
-          setBootError(
-            "Tài khoản mặc định cần mã 2FA. Vui lòng vào /accounts/add để đăng nhập và nhập mã."
-          );
-        } else {
-          setBootError(
-            "Không thể đăng nhập tài khoản mặc định. Kiểm tra VITE_DEFAULT_APPLE_EMAIL/PASSWORD trong frontend/.env."
-          );
-        }
-      }
-    })();
-  }, [accountsLoading, accounts.length, addAccount]);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -112,13 +60,6 @@ export default function App() {
       <main className="flex-1 flex flex-col min-w-0 safe-top">
         <MobileHeader />
         <Suspense fallback={<Loading />}>
-          {bootError && (
-            <div className="px-4 pt-4">
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 rounded-lg p-3 text-sm">
-                {bootError}
-              </div>
-            </div>
-          )}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/accounts" element={<AccountList />} />

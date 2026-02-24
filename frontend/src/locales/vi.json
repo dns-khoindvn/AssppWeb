@@ -368,35 +368,35 @@
   },
   "errors": {
     "download": {
-      "redirectLocation": "Failed to retrieve redirect location",
-      "passwordExpired": "Password token is expired",
-      "licenseRequired": "License required - purchase the app first",
-      "downloadFailed": "Download failed: {{failureType}}",
-      "noItems": "No items in response",
-      "missingUrl": "Missing download URL",
-      "missingMetadata": "Missing metadata",
-      "missingVersion": "Missing required version information",
-      "invalidSinf": "Invalid sinf item",
-      "noSinf": "No sinf found in response",
-      "tooManyRedirects": "Too many redirects"
+      "redirectLocation": "Không thể truy xuất vị trí chuyển hướng",
+      "passwordExpired": "Mã xác thực mật khẩu đã hết hạn",
+      "licenseRequired": "Cần có giấy phép - hãy ấn giấy phép trước khi ấn xuống",
+      "downloadFailed": "Tải xuống thất bại: {{failureType}}",
+      "noItems": "Không có mục nào được trả lời",
+      "missingUrl": "URL tải xuống bị thiếu",
+      "missingMetadata": "Thiếu siêu dữ liệu",
+      "missingVersion": "Thiếu thông tin phiên bản cần thiết",
+      "invalidSinf": "Mục sinf không hợp lệ",
+      "noSinf": "Không tìm thấy sinf trong phản hồi",
+      "tooManyRedirects": "Quá nhiều chuyển hướng"
     },
     "purchase": {
-      "paidNotSupported": "Purchasing paid apps is not supported",
-      "unavailable": "Item is temporarily unavailable",
-      "passwordExpired": "Password token is expired",
-      "subscriptionRequired": "Subscription required",
-      "termsRequired": "You must accept the Terms & Conditions: {{url}}",
-      "failed": "Purchase failed: {{failureType}}",
-      "failedGeneral": "Failed to purchase app",
-      "unknownError": "An unknown error has occurred"
+      "paidNotSupported": "Việc mua ứng dụng trả phí không được hỗ trợ.",
+      "unavailable": "Sản phẩm hiện tạm thời không có sẵn.",
+      "passwordExpired": "Mã xác thực mật khẩu đã hết hạn",
+      "subscriptionRequired": "Cần đăng ký",
+      "termsRequired": "Bạn phải chấp nhận Điều khoản & Điều kiện: {{url}}",
+      "failed": "Giao dịch mua hàng thất bại: {{failureType}}",
+      "failedGeneral": "Không thể mua ứng dụng",
+      "unknownError": "Đã xảy ra lỗi không xác định."
     },
     "auth": {
-      "requiresVerification": "Authentication requires verification code. If no verification code was prompted, try logging in at https://account.apple.com to trigger the alert and fill the code in the 2FA Code field.",
-      "redirectLocation": "Failed to retrieve redirect location",
-      "emptyBody": "Authentication failed: server returned HTTP {{status}} with empty body",
-      "missingAccountInfo": "Missing accountInfo in response",
-      "missingAddress": "Missing address in response",
-      "unknownReason": "Authentication failed for an unknown reason"
+      "requiresVerification": "Quá trình xác thực yêu cầu mã xác minh. Nếu không được yêu cầu nhập mã xác minh, hãy thử đăng nhập tại https://account.apple.com để kích hoạt thông báo và nhập mã vào trường Mã xác thực hai yếu tố (2FA Code).",
+      "redirectLocation": "Không thể truy xuất vị trí chuyển hướng",
+      "emptyBody": "Xác thực thất bại: máy chủ trả về HTTP {{status}} với nội dung trống.",
+      "missingAccountInfo": "Thông tin tài khoản bị thiếu trong phản hồi.
+      "missingAddress": "Thiếu địa chỉ trong phản hồi",
+      "unknownReason": "Xác thực không thành công vì lý do không xác định."
     }
   }
 }
