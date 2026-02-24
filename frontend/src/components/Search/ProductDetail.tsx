@@ -108,8 +108,8 @@ export default function ProductDetail() {
     setError("");
     setSuccess("");
     try {
-      const { output, updatedCookies, updatedAccount } = await getDownloadInfo(account, app, externalVersionId);
-await updateAccount(updatedAccount ? updatedAccount : { ...account, cookies: updatedCookies });
+      const result = await purchaseApp(account, app);
+      await updateAccount(result.updatedAccount ? result.updatedAccount : { ...account, cookies: result.updatedCookies });
       const hash = await accountHash(account);
       const versionedSoftware = {
         ...app,
